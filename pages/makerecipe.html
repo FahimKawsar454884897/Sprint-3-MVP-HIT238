@@ -1,0 +1,126 @@
+<html>
+<body>
+    
+    <head>
+        <button onclick="goBack()">Go Back</button>
+    <style>
+        
+        body{background-color: chocolate}
+
+        </style>
+    <h1>CREATE YOUR RECIPE</h1>
+    </head>
+    
+    <div class="mainData">
+  <div class="inputForm">
+    <div class="inputRow">
+      <label for="keyInput">Step</label>
+      <input type="text" name="key" id="keyInput" />
+    </div>
+    <div class="inputRow">
+      <label for="valueInput">Ingredient</label>
+      <input type="text" name="value" id="valueInput" />
+    </div>
+    <button id="saveBtn">Add Data</button>
+    <button id="loadBtn">Load Data</button>
+  </div>
+  <table class="outputTable">
+  </table>
+</div>
+    
+    <script >
+    
+    function saveDataClicked(evt) {
+  evt.preventDefault();
+
+  // Write code here
+  var key = document.querySelector('#keyInput').value;
+  var value = document.querySelector('#valueInput').value;
+  
+  console.log(key,value);
+  sessionStorage.setItem(key, value);
+  
+ 
+}
+
+/**
+* Load data from storage and show in the table
+* @param {Event} evt Click event
+* @return {undefined} No return value
+**/
+function loadDataClicked(evt) {
+  evt.preventDefault();
+  document
+    .querySelector('.outputTable')
+    .innerHTML = '';
+  
+  // Write code here
+   for(var i=0; i < sessionStorage.length; i++) {
+    var key = sessionStorage.key(i);;
+    var value = sessionStorage.getItem(key);
+    console.log(`${key}:${value}`)
+    showRow(key, value);
+  }
+  
+  
+
+  
+}
+
+function deleteClicked(evt) {
+  var key = evt.target.dataset.key;
+
+  // Write code here
+  
+   console.log(evt.target.dataset.key);
+   
+}
+
+/**
+* Add a new row to the output table
+* @param {string} key The key value to show
+* @param {string} value The value to show
+* @return {Element} The table row object
+**/
+function showRow(key, value) {
+  var keyCell = document.createElement('td');
+  keyCell.innerHTML = key;
+  var valueCell = document.createElement('td');
+  valueCell.innerHTML = value;
+  var deleteRow = document.createElement('td');
+  var deleteButton = document.createElement('button');
+  deleteButton.class = 'delBtn';
+  deleteButton.innerHTML = 'delete';
+  deleteButton.dataset.key = key;
+  deleteButton.addEventListener('click', deleteClicked);
+  deleteRow.appendChild(deleteButton);
+  var row = document.createElement('tr');
+  row.appendChild(keyCell);
+  row.appendChild(valueCell);
+  row.appendChild(deleteRow);
+
+  document
+    .querySelector('.outputTable')
+    .appendChild(row);
+  return row;
+}
+
+document
+  .getElementById('saveBtn')
+  .addEventListener('click', saveDataClicked);
+
+document
+  .getElementById('loadBtn')
+  .addEventListener('click', loadDataClicked);
+
+function goBack() {
+  window.history.back();
+}        
+    
+    </script>
+
+    
+    
+    
+    </body>
+</html>
